@@ -64,6 +64,12 @@ end
 runner = SuperLeagueRunner.new(@league)
 
 puts "Super League 2020 has finished."
+puts "Here's the table."
 puts @league.print_table
-
+puts ""
+puts "Here's teams ranked by attack."
+puts @league.rank_teams_by_attack
+puts ""
+puts "And here's a look at how they defended."
+puts @league.rank_teams_by_defence
 

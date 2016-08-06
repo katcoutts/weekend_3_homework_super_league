@@ -68,7 +68,8 @@ class Team
   end
 
   def win_percentage()
-    (wins.count.to_f / matches.count.to_f) * 100
+    result = (wins.count.to_f / matches.count.to_f) * 100
+    return result.round(2)
   end
 
   def losses()
@@ -167,10 +168,21 @@ class Team
   return points
   end 
 
+  def ave_points_conceded()
+    result = total_points_conceded.to_f / matches.count.to_f
+    return result.round(0)
+  end
+
+  def ave_points_scored()
+    result = total_points_scored.to_f / matches.count.to_f
+    return result.round(0)
+  end
+
   def points_difference()
     difference = total_points_scored - total_points_conceded
     return difference
   end
+
 
   def home_wins()
     home_wins = []

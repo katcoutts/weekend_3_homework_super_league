@@ -206,6 +206,24 @@ class League
     tp league_table_info
   end
 
+  def rank_teams_by_attack
+    attack_table = []
+    @teams.each do |team|
+      attack_table << ({name: team.name, points_for: team.total_points_scored, ave_points_scored: team.ave_points_scored})
+    end
+    sorted = attack_table.sort_by {|k| k[:ave_points_scored]}
+    tp sorted.reverse
+  end
+
+  def rank_teams_by_defence
+    defence_table = []
+    @teams.each do |team|
+      defence_table << ({name: team.name, points_conceded: team.total_points_conceded, ave_points_conceded: team.ave_points_conceded})
+    end
+    sorted = defence_table.sort_by {|k| k[:ave_points_conceded]}
+    tp sorted
+  end
+
 
 end 
 
