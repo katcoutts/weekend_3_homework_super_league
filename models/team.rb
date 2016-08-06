@@ -193,6 +193,16 @@ class Team
     end
     return home_wins
   end
+
+  def home_win_percentage
+    result = (home_wins.count.to_f / home_matches.count.to_f) * 100
+    return result.round(2)
+  end
+
+  def away_win_percentage
+    result = (away_wins.count.to_f / away_matches.count.to_f) * 100
+    return result.round(2)
+  end
   
   def away_wins
     away_wins = []
