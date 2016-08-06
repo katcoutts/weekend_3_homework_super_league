@@ -80,6 +80,16 @@ class TestLeague < Minitest::Test
     assert_equal(5, @league.count_away_wins)
   end
 
+  def test_percentage_home_team_wins
+    assert_equal(50.0, @league.percentage_home_team_wins)
+  end
+
+  def test_percentage_away_team_wins
+    assert_equal(41.67, @league.percentage_away_team_wins)
+  end
+
+  
+
   def test_can_count_draws()
     assert_equal( 1, @league.count_draws )
   end
@@ -152,7 +162,7 @@ class TestLeague < Minitest::Test
     assert_equal([{:name=>"Castleford Tigers", :wins=>6, :losses=>0, :draws=>0, :points_for=>133, :points_against=>90, :points_difference=>43, :league_points=>12}, {:name=>"Wigan Warriors", :wins=>2, :losses=>3, :draws=>1, :points_for=>101, :points_against=>104, :points_difference=>-3, :league_points=>5}, {:name=>"Warrington Wolves", :wins=>2, :losses=>4, :draws=>0, :points_for=>90, :points_against=>117, :points_difference=>-27, :league_points=>4}, {:name=>"Leeds Rhinos", :wins=>1, :losses=>4, :draws=>1, :points_for=>98, :points_against=>111, :points_difference=>-13, :league_points=>3}], result)
   end
 
-  
+
 
 
 

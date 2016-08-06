@@ -49,6 +49,16 @@ class League
       return home_wins
     end
 
+    def percentage_home_team_wins
+      result = (count_home_wins.to_f / Match.all.count.to_f) * 100
+      return result.round(2)
+    end
+
+    def percentage_away_team_wins
+      result = (count_away_wins.to_f / Match.all.count.to_f) * 100
+      return result.round(2)
+    end
+
     def count_away_wins()
       away_wins = 0
       @matches.each do |match|
