@@ -67,6 +67,10 @@ class Team
     return wins
   end
 
+  def win_percentage()
+    (wins.count.to_f / matches.count.to_f) * 100
+  end
+
   def losses()
     losses = []
     matches.each do |match|
@@ -167,6 +171,28 @@ class Team
     difference = total_points_scored - total_points_conceded
     return difference
   end
+
+  def home_wins()
+    home_wins = []
+    matches.each do |match|
+      if match.home_team_id == @id && match.home_team_score > match.away_team_score
+        home_wins << match
+      end
+    end
+    return home_wins
+  end
+  
+  def away_wins
+    away_wins = []
+    matches.each do |match|
+      if match.away_team_id == @id && match.away_team_score > match.home_team_score
+        away_wins << match
+      end
+    end
+    return away_wins
+  end  
+
+
 
 
 

@@ -36,6 +36,7 @@ class Match
     @id = match['id'].to_i  
   end
 
+
   def winner()
     if @home_team_score > @away_team_score
       sql = "SELECT teams.* FROM teams WHERE id = #{@home_team_id};"

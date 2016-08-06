@@ -7,10 +7,18 @@ require_relative('../models/match')
 class TestLeague < Minitest::Test
 
   def setup
+    Team.delete_all()
+    Match.delete_all()
+
     @team1 = Team.new({ 'name' => 'Castleford Tigers'})
     @team2 = Team.new({'name' => 'Leeds Rhinos'})
     @team3 = Team.new({'name' => 'Warrington Wolves'})
     @team4 = Team.new({'name' => 'Wigan Warriors'})
+    @team1.save
+    @team2.save
+    @team3.save
+    @team4.save
+
     @match1 = Match.new({'home_team_id' => @team1.id, 'away_team_id' => @team2.id, 'home_team_score' => 32, 'away_team_score' => 28})
     @match2 = Match.new({'home_team_id' => @team3.id, 'away_team_id' => @team4.id, 'home_team_score' => 24, 'away_team_score' => 27})
     @match3 = Match.new({'home_team_id' => @team1.id, 'away_team_id' => @team3.id, 'home_team_score' => 16, 'away_team_score' => 8})
@@ -24,11 +32,25 @@ class TestLeague < Minitest::Test
     @match11 = Match.new({'home_team_id' => @team1.id, 'away_team_id' => @team4.id, 'home_team_score' => 14, 'away_team_score' => 8})
     @match12 = Match.new({'home_team_id' => @team3.id, 'away_team_id' => @team2.id, 'home_team_score' => 16, 'away_team_score' => 14})
 
+    @match1.save
+    @match2.save
+    @match3.save
+    @match4.save
+    @match5.save
+    @match6.save
+    @match7.save
+    @match8.save
+    @match9.save
+    @match10.save
+    @match11.save
+    @match12.save
+
     @teams = [@team1, @team2, @team3, @team4]
     @matches = [@match1, @match2, @match3, @match4, @match5, @match6, @match7, @match8, @match9, @match10, @match11, @match12]
 
     @league = League.new(@matches, @teams)
   end
+
 
   def test_has_matches()
     assert_equal(12, @league.matches.count)
@@ -82,35 +104,56 @@ class TestLeague < Minitest::Test
     assert_equal([4, 3, 8, 4, 8, 10, 1, 12, 16, 0, 6, 2], @league.winning_margins)
   end
 
+
   def test_can_get_average_winning_margin
     assert_equal(6, @league.ave_winning_margin)
   end
 
+  def test_team_info
+    result = @league.team_info
+    assert_equal([{:name=>"Castleford Tigers", :points=>12}, {:name=>"Leeds Rhinos", :points=>3}, {:name=>"Warrington Wolves", :points=>4}, {:name=>"Wigan Warriors", :points=>5}], result)
+  end
 
 
- 
+    def test_can_count_a_teams_wins()
+      assert_equal(6, @league.team_wins(@team1))
+    end
+
+    def test_can_calculate_a_teams_points
+      assert_equal(12, @league.team_points(@team1))
+    end
+
+    # not working
+    # def test_can_give_match_winner_id()
+    #   result = @league.match_winner(@match1)
+    #   assert_equal('Castleford Tigers', result.name)
+    # end
+
   
 
-# REGARDLESS OF WHAT I DID COULD NOT GET TEAM AND MATCH SPECIFIC TESTS TO PASS DESPITE THE FACT ALL TEAM AND MATCH METHODS ARE WORKING WHEN I GOT INTO PRY IN THE CONSOLE RB
-  # def test_can_count_a_teams_wins()
-  #   assert_equal(6, @league.team_wins(@team1).count)
-  # end
+    def test_can_total_a_teams_points
+      assert_equal(133, @league.total_a_teams_points(@team1))
+    end
 
-  # def test_can_calculate_a_teams_points
-  #   assert_equal(12, @league.team_points(@team1))
-  # end
 
-  # def test_can_give_match_winner_id()
-  #   assert_equal('Castleford Tigers', @league.match_winner(@match1).name)
-  # end
 
-  # def test_can_give_a_teams_no_of_wins
-  #   result = @league.get_teams_no_of_wins(@team1)
-  #   assert_equal(6, result)
-  # end
+  def test_gives_team_positions
+    result = @league.team_positions
+    assert_equal([{:name=>"Castleford Tigers", :points=>12}, {:name=>"Wigan Warriors", :points=>5}, {:name=>"Warrington Wolves", :points=>4}, {:name=>"Leeds Rhinos", :points=>3}], result)
+  end
 
-  # def test_can_total_a_teams_points
-  #   assert_equal(133, @league.total_a_teams_points(@team1))
-  # end
+  def test_gives_league_topper
+    result = @league.league_topper
+    assert_equal({:name=>"Castleford Tigers", :points=>12}, result)
+  end
+
+  def test_gives_league_table_info
+    result = @league.league_table_info
+    assert_equal([{:name=>"Castleford Tigers", :wins=>6, :losses=>0, :draws=>0, :points_for=>133, :points_against=>90, :points_difference=>43, :league_points=>12}, {:name=>"Wigan Warriors", :wins=>2, :losses=>3, :draws=>1, :points_for=>101, :points_against=>104, :points_difference=>-3, :league_points=>5}, {:name=>"Warrington Wolves", :wins=>2, :losses=>4, :draws=>0, :points_for=>90, :points_against=>117, :points_difference=>-27, :league_points=>4}, {:name=>"Leeds Rhinos", :wins=>1, :losses=>4, :draws=>1, :points_for=>98, :points_against=>111, :points_difference=>-13, :league_points=>3}], result)
+  end
+
+  
+
+
 
 end

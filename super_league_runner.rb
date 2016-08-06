@@ -8,8 +8,13 @@ class SuperLeagueRunner
   def initialize(league)
     @league = league
   end
-
+# NOT WORKING
   def run_league
+    team_totals = []
+    @teams.each do |team|
+      team_totals << {name: @team.name, points: @team.league_points}
+    end
+    return team_totals
   end
 
 end
@@ -21,6 +26,10 @@ end
 @team2 = Team.new({'name' => 'Leeds Rhinos'})
 @team3 = Team.new({'name' => 'Warrington Wolves'})
 @team4 = Team.new({'name' => 'Wigan Warriors'})
+@team1.save()
+@team2.save()
+@team3.save()
+@team4.save()
 @match1 = Match.new({'home_team_id' => @team1.id, 'away_team_id' => @team2.id, 'home_team_score' => 32, 'away_team_score' => 28})
 @match2 = Match.new({'home_team_id' => @team3.id, 'away_team_id' => @team4.id, 'home_team_score' => 24, 'away_team_score' => 27})
 @match3 = Match.new({'home_team_id' => @team1.id, 'away_team_id' => @team3.id, 'home_team_score' => 16, 'away_team_score' => 8})
@@ -34,6 +43,19 @@ end
 @match11 = Match.new({'home_team_id' => @team1.id, 'away_team_id' => @team4.id, 'home_team_score' => 14, 'away_team_score' => 8})
 @match12 = Match.new({'home_team_id' => @team3.id, 'away_team_id' => @team2.id, 'home_team_score' => 16, 'away_team_score' => 14})
 
+@match1.save
+@match2.save
+@match3.save
+@match4.save
+@match5.save
+@match6.save
+@match7.save
+@match8.save
+@match9.save
+@match10.save
+@match11.save
+@match12.save
+
 @teams = [@team1, @team2, @team3, @team4]
 @matches = [@match1, @match2, @match3, @match4, @match5, @match6, @match7, @match8, @match9, @match10, @match11, @match12]
 
@@ -42,11 +64,6 @@ end
 runner = SuperLeagueRunner.new(@league)
 
 puts "Super League 2020 has finished."
-puts "Would you like to find out how it went? y/n"
-answer = gets.chomp
-if answer == 'y'
-  runner.run_league
-else 
-  puts "Ok. See you later."
-end
+puts @league.print_table
+
 

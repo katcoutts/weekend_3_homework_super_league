@@ -1,6 +1,5 @@
-# this was ok but any time I tried to do any methods in here that passed in a particular match or team I couldn't get it to pass a test - but I know that when running console.rb the team and match methods I was calling on are all working.
-
 require('pg')
+require('table_print')
 require_relative('match')
 require_relative('team')
 require('pry-byebug')
@@ -9,10 +8,12 @@ class League
 
   attr_accessor :matches, :teams
 
-    def initialize(matches, teams)
+    def initialize(matches,teams)
       @matches = matches
       @teams = teams
     end
+
+
 
     def total_points()
       total = 0
@@ -110,71 +111,100 @@ class League
       return winning_margins
     end
 
+
     def ave_winning_margin()
       total_winning_margins = winning_margins.inject{ |sum,x| sum + x }
       ave_win_margin = (total_winning_margins / Match.all.count).to_f
       return ave_win_margin.round
     end
 
-    def total_a_teams_points(team)
-      points = 0
-      team.matches.each do |match|
-        if match.home_team_id == team.id
-          points += match.home_team_score
-        elsif match.away_team_id == team.id
-          points += match.away_team_score
-        end
-      end
-      return points
+   def team_info
+    result = []
+    @teams.each do |team|
+      result << {name: team.name, points: team.league_points}
     end
+    return result
+  end
 
-
+    # So like, find the team in league.teams, then do what you’ve written.
 
 # This doesn't pass but Zsolt says it doesn't matter.
-    # def team_wins(team)
-    #   wins = 0
-    #   team.matches.each do |match|
-    #     if match.winner.name == team.name
-    #       wins += 1
-    #   end
-    # end 
-    # return wins
-    # end
+    def team_wins(team)
+      wins = 0
+      team.matches.each do |match|
+        if match.winner.name == team.name
+          wins += 1
+      end
+    end 
+    return wins
+    end
 
-  # def team_points(team)
-  #   points = (team.wins.count * 2) + (team.draws.count)
-  #   return points
-  # end
+  def team_points(team)
+    points = (team.wins.count * 2) + (team.draws.count)
+    return points
+  end
 
-  # def team_wins(team)
-  #   wins = []
-  #   team.matches.each do |match| 
-  #     if match.winner_id == team.id
-  #       wins << match
-  #     end
-  #   end
-  # return wins
-  # end
+  def team_winning_games(team)
+    wins = []
+    team.matches.each do |match| 
+      if match.winner_id == team.id
+        wins << match
+      end
+    end
+  return wins
+  end
 
+
+# not working
   # def match_winner(match)
-  #   @match.winner_id
+  #   match.winner_id
   #   teams.each do |team|
-  #     if team_id == @match.winner_id
-  #     team = Team.new
-  #     return team
+  #     if team.id == match.winner_id
+  #     team = Team.new    
   #   end
   # end
+  # return team
   # end
 
-  # def get_teams_no_of_wins(team)
-  #   wins = 0
-  #   team.matches.each do |match|
-  #     if match.winner_id == team.id
-  #       wins += 1
-  #     end
-  #   end
-  #   return wins
-  # end 
+
+
+  def total_a_teams_points(team)
+    points = 0
+    team.matches.each do |match|
+      if match.home_team_id == team.id
+        points += match.home_team_score
+      elsif match.away_team_id == team.id
+        points += match.away_team_score
+      end
+    end
+    return points
+  end
+
+  def team_positions()
+    team_points = []
+    @teams.each do |team|
+      team_points << ({name: team.name, points: team.league_points})
+    end
+    sorted = team_points.sort_by { |k| k[:points]}
+    return sorted.reverse
+  end
+
+  def league_topper()
+    team_positions.first
+  end
+
+  def league_table_info()
+    league_table = []
+    @teams.each do |team|
+      league_table << ({name: team.name, wins: team.wins.count, losses: team.losses.count, draws: team.draws.count, points_for: team.total_points_scored, points_against: team.total_points_conceded, points_difference: team.points_difference, league_points: team.league_points})
+      end
+    sorted = league_table.sort_by { |k| k[:league_points]}
+    return sorted.reverse
+  end
+
+  def print_table
+    tp league_table_info
+  end
 
 
 end 
