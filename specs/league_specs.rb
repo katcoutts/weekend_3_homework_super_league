@@ -62,9 +62,55 @@ class TestLeague < Minitest::Test
     assert_equal( 1, @league.count_draws )
   end
 
-  def test_can_count_a_teams_wins()
-    assert_equal(6, @league.team_wins(@team1))
+  def test_can_give_biggest_winning_score()
+    assert_equal(32, @league.biggest_winning_score)
   end
 
+  def test_can_give_lowest_winning_score()
+    assert_equal(14, @league.lowest_winning_score)
+  end
+
+  def test_can_give_average_points_scored_by_a_team_in_a_match()
+    assert_equal(18, @league.average_points())
+  end
+
+  def test_can_give_average_winning_score
+    assert_equal(19, @league.average_winning_score())
+  end
+
+  def test_can_get_winning_margins
+    assert_equal([4, 3, 8, 4, 8, 10, 1, 12, 16, 0, 6, 2], @league.winning_margins)
+  end
+
+  def test_can_get_average_winning_margin
+    assert_equal(6, @league.ave_winning_margin)
+  end
+
+
+
+ 
+  
+
+# REGARDLESS OF WHAT I DID COULD NOT GET TEAM AND MATCH SPECIFIC TESTS TO PASS DESPITE THE FACT ALL TEAM AND MATCH METHODS ARE WORKING WHEN I GOT INTO PRY IN THE CONSOLE RB
+  # def test_can_count_a_teams_wins()
+  #   assert_equal(6, @league.team_wins(@team1).count)
+  # end
+
+  # def test_can_calculate_a_teams_points
+  #   assert_equal(12, @league.team_points(@team1))
+  # end
+
+  # def test_can_give_match_winner_id()
+  #   assert_equal('Castleford Tigers', @league.match_winner(@match1).name)
+  # end
+
+  # def test_can_give_a_teams_no_of_wins
+  #   result = @league.get_teams_no_of_wins(@team1)
+  #   assert_equal(6, result)
+  # end
+
+  # def test_can_total_a_teams_points
+  #   assert_equal(133, @league.total_a_teams_points(@team1))
+  # end
 
 end

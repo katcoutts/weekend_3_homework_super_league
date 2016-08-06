@@ -1,9 +1,10 @@
 require('pg')
 require_relative('../db/sql_runner')
 
+
 class Match
 
-  attr_reader :id 
+  attr_reader :id, :winner_id 
   attr_accessor :home_team_id, :away_team_id, :home_team_score, :away_team_score
 
   def initialize(options)
@@ -12,6 +13,7 @@ class Match
     @away_team_id = options['away_team_id'].to_i
     @home_team_score = options['home_team_score'].to_i
     @away_team_score = options['away_team_score'].to_i 
+    @winner_id = options['winner_id'].to_i
   end
 
 
@@ -28,26 +30,29 @@ class Match
   end
 
   def save()
-    sql = "INSERT INTO matches (home_team_id, away_team_id, home_team_score, away_team_score) VALUES (#{ @home_team_id }, #{@away_team_id}, #{@home_team_score}, #{@away_team_score}) RETURNING *;"
+    winner
+    sql = "INSERT INTO matches (home_team_id, away_team_id, home_team_score, away_team_score, winner_id) VALUES (#{ @home_team_id }, #{@away_team_id}, #{@home_team_score}, #{@away_team_score}, #{@winner_id}) RETURNING *;"
     match = SqlRunner.run( sql ).first
-    @id = match['id'].to_i
+    @id = match['id'].to_i  
   end
 
   def winner()
     if @home_team_score > @away_team_score
       sql = "SELECT teams.* FROM teams WHERE id = #{@home_team_id};"
-      winner = SqlRunner.run( sql ).first
+      win = SqlRunner.run( sql ).first
+      winner = Team.new(win)
+      @winner_id = winner.id
     elsif @away_team_score > @home_team_score
       sql = "SELECT teams.* FROM teams WHERE id = #{@away_team_id};"
-      winner = SqlRunner.run( sql ).first
+      win = SqlRunner.run( sql ).first
+      winner = Team.new(win)
+      @winner_id = winner.id
     elsif @away_team_score == @home_team_score
       winner = nil 
+      @winner_id = 0
     end
     return winner
   end
-
-
-
 
   def update()
       sql = "UPDATE matches SET

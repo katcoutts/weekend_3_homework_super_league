@@ -1,5 +1,6 @@
 require_relative('./models/team')
 require_relative('./models/match')
+require_relative('./models/league')
 require('pry-byebug')
 
 Match.delete_all()
@@ -43,6 +44,9 @@ match9.save
 match10.save
 match11.save
 match12.save
+
+teams = [team1, team2, team3, team4]
+matches = [match1, match2, match3, match4, match5, match6, match7, match8, match9, match10, match11, match12]
 
 
 binding.pry

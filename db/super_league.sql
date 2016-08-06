@@ -11,7 +11,8 @@ CREATE TABLE matches(
   home_team_score int4,
   away_team_score int4,
   home_team_id int4 references teams(id) ON DELETE CASCADE,
-  away_team_id int4 references teams(id) ON DELETE CASCADE
+  away_team_id int4 references teams(id) ON DELETE CASCADE,
+  winner_id int4
 );
 
 
