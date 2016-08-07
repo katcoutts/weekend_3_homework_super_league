@@ -96,6 +96,15 @@ class TestLeague < Minitest::Test
     assert_equal(11483, @league.ave_attendance)
   end
 
+  
+  def test_can_return_match_with_biggest_attendance
+    assert_equal(16280, @league.biggest_attendance[:attendance])
+  end
+
+  def test_can_return_match_with_lowest_attendance
+    assert_equal(7350, @league.lowest_attendance[:attendance])
+  end
+
   def test_can_count_draws()
     assert_equal( 1, @league.count_draws )
   end
@@ -118,6 +127,10 @@ class TestLeague < Minitest::Test
 
   def test_can_get_winning_margins
     assert_equal([4, 3, 8, 4, 8, 10, 1, 12, 16, 0, 6, 2], @league.winning_margins)
+  end
+
+  def test_can_get_biggest_winning_margin
+    assert_equal(16, @league.biggest_margin)
   end
 
 

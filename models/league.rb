@@ -92,6 +92,24 @@ class League
     return result.round
   end
 
+  def biggest_attendance
+    attendances = []
+    @matches.each do |match|
+      attendances << {attendance: match.attendance, match_id: match.id, home_team_id: match.home_team_id, away_team_id: match.away_team_id}
+    end
+    result = attendances.sort_by { |k| k[:attendance]} 
+    return result.last
+  end 
+
+  def lowest_attendance
+    attendances = []
+    @matches.each do |match|
+      attendances << {attendance: match.attendance, match_id: match.id, home_team_id: match.home_team_id, away_team_id: match.away_team_id}
+    end
+    result = attendances.sort_by { |k| k[:attendance]} 
+    return result.first
+  end 
+
   def winning_scores()
     winning_scores = []
     @matches.each do |match|
@@ -132,6 +150,10 @@ class League
       winning_margins << difference.abs
     end
     return winning_margins
+  end
+
+  def biggest_margin()
+    return winning_margins.sort.last
   end
 
 
