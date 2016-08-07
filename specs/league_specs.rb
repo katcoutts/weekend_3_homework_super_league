@@ -19,18 +19,18 @@ class TestLeague < Minitest::Test
     @team3.save
     @team4.save
 
-    @match1 = Match.new({'home_team_id' => @team1.id, 'away_team_id' => @team2.id, 'home_team_score' => 32, 'away_team_score' => 28})
-    @match2 = Match.new({'home_team_id' => @team3.id, 'away_team_id' => @team4.id, 'home_team_score' => 24, 'away_team_score' => 27})
-    @match3 = Match.new({'home_team_id' => @team1.id, 'away_team_id' => @team3.id, 'home_team_score' => 16, 'away_team_score' => 8})
-    @match4 = Match.new({'home_team_id' => @team2.id, 'away_team_id' => @team4.id, 'home_team_score' => 14, 'away_team_score' => 10})
-    @match5 = Match.new({'home_team_id' => @team4.id, 'away_team_id' => @team1.id, 'home_team_score' => 16, 'away_team_score' => 24})
-    @match6 = Match.new({'home_team_id' => @team2.id, 'away_team_id' => @team3.id, 'home_team_score' => 8, 'away_team_score' => 18})
-    @match7 = Match.new({'home_team_id' => @team2.id, 'away_team_id' => @team1.id, 'home_team_score' => 18, 'away_team_score' => 19})
-    @match8 = Match.new({'home_team_id' => @team4.id, 'away_team_id' => @team3.id, 'home_team_score' => 24, 'away_team_score' => 12})
-    @match9 = Match.new({'home_team_id' => @team3.id, 'away_team_id' => @team1.id, 'home_team_score' => 12, 'away_team_score' => 28})
-    @match10 = Match.new({'home_team_id' => @team4.id, 'away_team_id' => @team2.id, 'home_team_score' => 16, 'away_team_score' => 16})
-    @match11 = Match.new({'home_team_id' => @team1.id, 'away_team_id' => @team4.id, 'home_team_score' => 14, 'away_team_score' => 8})
-    @match12 = Match.new({'home_team_id' => @team3.id, 'away_team_id' => @team2.id, 'home_team_score' => 16, 'away_team_score' => 14})
+    @match1 = Match.new({'home_team_id' => @team1.id, 'away_team_id' => @team2.id, 'home_team_score' => 32, 'away_team_score' => 28, 'attendance' => 11500})
+    @match2 = Match.new({'home_team_id' => @team3.id, 'away_team_id' => @team4.id, 'home_team_score' => 24, 'away_team_score' => 27, 'attendance' => 7350})
+    @match3 = Match.new({'home_team_id' => @team1.id, 'away_team_id' => @team3.id, 'home_team_score' => 16, 'away_team_score' => 8, 'attendance' => 9262})
+    @match4 = Match.new({'home_team_id' => @team2.id, 'away_team_id' => @team4.id, 'home_team_score' => 14, 'away_team_score' => 10, 'attendance' => 15228})
+    @match5 = Match.new({'home_team_id' => @team4.id, 'away_team_id' => @team1.id, 'home_team_score' => 16, 'away_team_score' => 24, 'attendance' => 12634})
+    @match6 = Match.new({'home_team_id' => @team2.id, 'away_team_id' => @team3.id, 'home_team_score' => 8, 'away_team_score' => 18, 'attendance' => 16280})
+    @match7 = Match.new({'home_team_id' => @team2.id, 'away_team_id' => @team1.id, 'home_team_score' => 18, 'away_team_score' => 19, 'attendance' => 14289})
+    @match8 = Match.new({'home_team_id' => @team4.id, 'away_team_id' => @team3.id, 'home_team_score' => 24, 'away_team_score' => 12, 'attendance' => 10836})
+    @match9 = Match.new({'home_team_id' => @team3.id, 'away_team_id' => @team1.id, 'home_team_score' => 12, 'away_team_score' => 28, 'attendance' => 10263})
+    @match10 = Match.new({'home_team_id' => @team4.id, 'away_team_id' => @team2.id, 'home_team_score' => 16, 'away_team_score' => 16, 'attendance' => 11635})
+    @match11 = Match.new({'home_team_id' => @team1.id, 'away_team_id' => @team4.id, 'home_team_score' => 14, 'away_team_score' => 8, 'attendance' => 9273})
+    @match12 = Match.new({'home_team_id' => @team3.id, 'away_team_id' => @team2.id, 'home_team_score' => 16, 'away_team_score' => 14, 'attendance' => 9253})
 
     @match1.save
     @match2.save
@@ -81,14 +81,20 @@ class TestLeague < Minitest::Test
   end
 
   def test_percentage_home_team_wins
-    assert_equal(50.0, @league.percentage_home_team_wins)
+    assert_equal(50, @league.percentage_home_team_wins)
   end
 
   def test_percentage_away_team_wins
-    assert_equal(41.67, @league.percentage_away_team_wins)
+    assert_equal(42, @league.percentage_away_team_wins)
   end
 
-  
+  def test_can_sum_attendances
+    assert_equal(137803, @league.sum_attendances)
+  end
+
+  def test_can_get_ave_attendance
+    assert_equal(11483, @league.ave_attendance)
+  end
 
   def test_can_count_draws()
     assert_equal( 1, @league.count_draws )
@@ -145,7 +151,10 @@ class TestLeague < Minitest::Test
       assert_equal(133, @league.total_a_teams_points(@team1))
     end
 
-
+    def test_gives_a_team_table_position
+      result = @league.table_position(@team2)
+      assert_equal(4, result)
+    end
 
   def test_gives_team_positions
     result = @league.team_positions
@@ -159,7 +168,7 @@ class TestLeague < Minitest::Test
 
   def test_gives_league_table_info
     result = @league.league_table_info
-    assert_equal([{:name=>"Castleford Tigers", :wins=>6, :losses=>0, :draws=>0, :points_for=>133, :points_against=>90, :points_difference=>43, :league_points=>12}, {:name=>"Wigan Warriors", :wins=>2, :losses=>3, :draws=>1, :points_for=>101, :points_against=>104, :points_difference=>-3, :league_points=>5}, {:name=>"Warrington Wolves", :wins=>2, :losses=>4, :draws=>0, :points_for=>90, :points_against=>117, :points_difference=>-27, :league_points=>4}, {:name=>"Leeds Rhinos", :wins=>1, :losses=>4, :draws=>1, :points_for=>98, :points_against=>111, :points_difference=>-13, :league_points=>3}], result)
+    assert_equal([{:position=>1, :name=>"Castleford Tigers", :wins=>6, :losses=>0, :draws=>0, :points_for=>133, :points_against=>90, :points_difference=>43, :league_points=>12}, {:position=>2, :name=>"Wigan Warriors", :wins=>2, :losses=>3, :draws=>1, :points_for=>101, :points_against=>104, :points_difference=>-3, :league_points=>5}, {:position=>3, :name=>"Warrington Wolves", :wins=>2, :losses=>4, :draws=>0, :points_for=>90, :points_against=>117, :points_difference=>-27, :league_points=>4}, {:position=>4, :name=>"Leeds Rhinos", :wins=>1, :losses=>4, :draws=>1, :points_for=>98, :points_against=>111, :points_difference=>-13, :league_points=>3}], result)
   end
 
 

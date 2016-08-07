@@ -104,6 +104,7 @@ class Team
     return result
   end
 
+
   def home_matches()
     home_matches = []
     matches.each do |match|
@@ -165,7 +166,7 @@ class Team
         points += match.home_team_score
       end
     end
-  return points
+    return points
   end 
 
   def ave_points_conceded()
@@ -213,6 +214,34 @@ class Team
     end
     return away_wins
   end  
+
+  def total_attendance
+    attendance = 0
+    matches.each do |match|
+      attendance = attendance + match.attendance
+    end
+    return attendance
+  end
+
+  def total_home_attendance
+    attendance = 0
+    matches.each do |match|
+      if match.home_team_id == @id
+        attendance = attendance + match.attendance
+      end
+    end
+    return attendance
+  end
+
+  def ave_attendance
+    result = total_attendance.to_f / matches.count.to_f
+    return result.round
+  end
+
+  def ave_home_attendance
+    result = total_home_attendance.to_f / home_matches.count.to_f
+    return result.round
+  end
 
 
 

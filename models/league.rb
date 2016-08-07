@@ -8,127 +8,140 @@ class League
 
   attr_accessor :matches, :teams
 
-    def initialize(matches,teams)
-      @matches = matches
-      @teams = teams
+  def initialize(matches,teams)
+    @matches = matches
+    @teams = teams
+  end
+
+
+
+  def total_points()
+    total = 0
+    @matches.each do |match| 
+      total = total + match.away_team_score + match.home_team_score
     end
+    total
+  end
 
+  def home_team_points()
+    total = 0
+    @matches.each do |match| 
+      total = total + match.home_team_score
+    end
+    total
+  end
 
+  def away_team_points()
+    total = 0
+    @matches.each do |match| 
+      total = total + match.away_team_score 
+    end
+    total
+  end
 
-    def total_points()
-      total = 0
-      @matches.each do |match| 
-        total = total + match.away_team_score + match.home_team_score
+  def count_home_wins()
+    home_wins = 0
+    @matches.each do |match|
+      if match.home_team_score > match.away_team_score
+        home_wins += 1
       end
-      total
     end
+    return home_wins
+  end
 
-    def home_team_points()
-      total = 0
-      @matches.each do |match| 
-        total = total + match.home_team_score
+  def percentage_home_team_wins
+    result = (count_home_wins.to_f / Match.all.count.to_f) * 100
+    return result.round()
+  end
+
+  def percentage_away_team_wins
+    result = (count_away_wins.to_f / Match.all.count.to_f) * 100
+    return result.round()
+  end
+
+  def count_away_wins()
+    away_wins = 0
+    @matches.each do |match|
+      if match.away_team_score > match.home_team_score
+        away_wins += 1
       end
-      total
     end
+    return away_wins
+  end
 
-    def away_team_points()
-      total = 0
-      @matches.each do |match| 
-        total = total + match.away_team_score 
+  def count_draws()
+    draws = 0
+    @matches.each do |match| 
+      if match.home_team_score == match.away_team_score
+        draws += 1
       end
-      total
     end
+    return draws
+  end
 
-    def count_home_wins()
-      home_wins = 0
-      @matches.each do |match|
-        if match.home_team_score > match.away_team_score
-          home_wins += 1
-        end
+  def sum_attendances
+    total = 0
+    @matches.each do |match| 
+      total = total + match.attendance
+    end
+    total
+  end
+
+  def ave_attendance
+    result = sum_attendances / Match.all.count
+    return result.round
+  end
+
+  def winning_scores()
+    winning_scores = []
+    @matches.each do |match|
+      if match.home_team_score > match.away_team_score
+        winning_scores << match.home_team_score
+      elsif match.away_team_score > match.home_team_score
+        winning_scores << match.away_team_score
       end
-      return home_wins
     end
+    return winning_scores
+  end
 
-    def percentage_home_team_wins
-      result = (count_home_wins.to_f / Match.all.count.to_f) * 100
-      return result.round(2)
-    end
-
-    def percentage_away_team_wins
-      result = (count_away_wins.to_f / Match.all.count.to_f) * 100
-      return result.round(2)
-    end
-
-    def count_away_wins()
-      away_wins = 0
-      @matches.each do |match|
-        if match.away_team_score > match.home_team_score
-          away_wins += 1
-        end
-      end
-      return away_wins
-    end
-
-    def count_draws()
-      draws = 0
-      @matches.each do |match| 
-        if match.home_team_score == match.away_team_score
-          draws += 1
-        end
-      end
-      return draws
-    end
-
-    def winning_scores()
-      winning_scores = []
-      @matches.each do |match|
-        if match.home_team_score > match.away_team_score
-          winning_scores << match.home_team_score
-        elsif match.away_team_score > match.home_team_score
-          winning_scores << match.away_team_score
-        end
-      end
-      return winning_scores
-    end
-
-    def biggest_winning_score()
-      biggest_win_score = winning_scores.sort.last
+  def biggest_winning_score()
+    biggest_win_score = winning_scores.sort.last
     return biggest_win_score
-    end
+  end
 
-    def lowest_winning_score()
-      lowest_winning_score = winning_scores.sort.first
+  def lowest_winning_score()
+    lowest_winning_score = winning_scores.sort.first
     return lowest_winning_score
+  end
+
+  def average_winning_score
+    total_win_scores = winning_scores.inject{ |sum,x| sum + x }
+    ave_win_score = (total_win_scores / Match.all.count).to_f
+    return ave_win_score.round
+  end
+
+  def average_points()
+    average = total_points.to_f / (Match.all.count * 2).to_f
+    return average.round
+  end
+
+  def winning_margins()
+    winning_margins = []
+    @matches.each do |match|
+      difference = match.home_team_score - match.away_team_score
+      winning_margins << difference.abs
     end
-
-    def average_winning_score
-      total_win_scores = winning_scores.inject{ |sum,x| sum + x }
-      ave_win_score = (total_win_scores / Match.all.count).to_f
-      return ave_win_score.round
-    end
-
-    def average_points()
-      average = total_points.to_f / (Match.all.count * 2).to_f
-      return average.round
-    end
-
-    def winning_margins()
-      winning_margins = []
-      @matches.each do |match|
-        difference = match.home_team_score - match.away_team_score
-        winning_margins << difference.abs
-      end
-      return winning_margins
-    end
+    return winning_margins
+  end
 
 
-    def ave_winning_margin()
-      total_winning_margins = winning_margins.inject{ |sum,x| sum + x }
-      ave_win_margin = (total_winning_margins / Match.all.count).to_f
-      return ave_win_margin.round
-    end
+  def ave_winning_margin()
+    total_winning_margins = winning_margins.inject{ |sum,x| sum + x }
+    ave_win_margin = (total_winning_margins / Match.all.count).to_f
+    return ave_win_margin.round
+  end
 
-   def team_info
+  def team_info
     result = []
     @teams.each do |team|
       result << {name: team.name, points: team.league_points}
@@ -136,18 +149,16 @@ class League
     return result
   end
 
-    # So like, find the team in league.teams, then do what you’ve written.
-
-# This doesn't pass but Zsolt says it doesn't matter.
-    def team_wins(team)
-      wins = 0
-      team.matches.each do |match|
-        if match.winner.name == team.name
-          wins += 1
+  
+  def team_wins(team)
+    wins = 0
+    team.matches.each do |match|
+      if match.winner.name == team.name
+        wins += 1
       end
     end 
     return wins
-    end
+  end
 
   def team_points(team)
     points = (team.wins.count * 2) + (team.draws.count)
@@ -161,20 +172,11 @@ class League
         wins << match
       end
     end
-  return wins
+    return wins
   end
 
 
-# not working
-  # def match_winner(match)
-  #   match.winner_id
-  #   teams.each do |team|
-  #     if team.id == match.winner_id
-  #     team = Team.new    
-  #   end
-  # end
-  # return team
-  # end
+
 
 
 
@@ -188,6 +190,18 @@ class League
       end
     end
     return points
+  end
+
+  def table_position(test_team)
+    team_positions = []
+    @teams.each do |team|
+      team_positions << ({name: team.name, points: team.league_points})
+    end
+    sorted = team_positions.sort_by { |k| k[:points]}
+    team_sorted_positions = sorted.reverse
+    index = team_sorted_positions.index {|h| h[:name] == test_team.name }
+    table_position = index + 1
+    return table_position
   end
 
   def team_positions()
@@ -206,8 +220,8 @@ class League
   def league_table_info()
     league_table = []
     @teams.each do |team|
-      league_table << ({name: team.name, wins: team.wins.count, losses: team.losses.count, draws: team.draws.count, points_for: team.total_points_scored, points_against: team.total_points_conceded, points_difference: team.points_difference, league_points: team.league_points})
-      end
+      league_table << ({position: table_position(team), name: team.name, wins: team.wins.count, losses: team.losses.count, draws: team.draws.count, points_for: team.total_points_scored, points_against: team.total_points_conceded, points_difference: team.points_difference, league_points: team.league_points})
+    end
     sorted = league_table.sort_by { |k| k[:league_points]}
     return sorted.reverse
   end
